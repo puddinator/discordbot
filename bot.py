@@ -3,16 +3,12 @@ from discord.ext import commands
 
 bot = commands.Bot(command_prefix='$')
 
-python -m pip install git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py[voice]
-
 @bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    
-print(discord.__version__)
 
 @bot.command()
 async def add(ctx, a: int, b: int):
