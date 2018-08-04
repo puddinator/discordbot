@@ -1,21 +1,32 @@
 import discord
+from discord.ext.commands import Bot
 from discord.ext import commands
+import asyncio
+import time
 
-bot = commands.Bot(command_prefix='$')
+Client = discord.Client()
+client = commands.Bot(command_prefix = "?")
 
-@bot.event
+chat_filter = ["PINEAPPLE", "APPLE", "CHROME"]
+bypass_list = []
+
+@client.event
 async def on_ready():
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
+    print("Bot is online and connected to Discord")
 
-@bot.command()
-async def greet(ctx):
-    await ctx.send(":smiley: :wave: Hello, there!")
+@client.event
+async def on_message(message):
+    contents = message.content.split(" ") #contents is a list type
+    for word in contents:
+        if word.upper() in chat_filter:
+            if not message.author.id in bypass_list:
+                try:
+                    await client.delete_message(message)
+                    await client.send_message(message.channel, "**Hey!** You're not allowed to use that word here!")
+                except discord.errors.NotFound:
+                    return
 
-bot.run('<YOUR_TOKEN_HERE>')
+             
         
 
 client.run('NDc1MTgyOTY4NDQ5NTMxOTE2.Dkb-MA.skbs9W1IsXkax-xLOrhGh9ed380')
-
