@@ -3,6 +3,8 @@ from discord.ext import commands
 
 bot = commands.Bot(command_prefix='$')
 
+python -m pip install git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py[voice]
+
 @bot.event
 async def on_ready():
     print('Logged in as')
