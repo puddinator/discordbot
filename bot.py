@@ -1,32 +1,59 @@
 import discord
-from discord.ext.commands import Bot
 from discord.ext import commands
-import asyncio
-import time
 
-Client = discord.Client()
-client = commands.Bot(command_prefix = "?")
+bot = commands.Bot(command_prefix='$')
 
-chat_filter = ["PINEAPPLE", "APPLE", "CHROME"]
-bypass_list = []
-
-@client.event
+@bot.event
 async def on_ready():
-    print("Bot is online and connected to Discord")
+    print('Logged in as')
+    print(bot.user.name)
+    print(bot.user.id)
+    print('------')
 
-@client.event
-async def on_message(message):
-    contents = message.content.split(" ") #contents is a list type
-    for word in contents:
-        if word.upper() in chat_filter:
-            if not message.author.id in bypass_list:
-                try:
-                    await client.delete_message(message)
-                    await client.send_message(message.channel, "**Hey!** You're not allowed to use that word here!")
-                except discord.errors.NotFound:
-                    return
-                   
-                    
-        
+@bot.command()
+async def add(ctx, a: int, b: int):
+    await ctx.send(a+b)
 
-client.run('NDc1MTgyOTY4NDQ5NTMxOTE2.Dkb-MA.skbs9W1IsXkax-xLOrhGh9ed380')
+@bot.command()
+async def multiply(ctx, a: int, b: int):
+    await ctx.send(a*b)
+
+@bot.command()
+async def greet(ctx):
+    await ctx.send(":smiley: :wave: Hello, there!")
+
+@bot.command()
+async def cat(ctx):
+    await ctx.send("https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif")
+
+@bot.command()
+async def info(ctx):
+    embed = discord.Embed(title="nice bot", description="Nicest bot there is ever.", color=0xeee657)
+    
+    # give info about you here
+    embed.add_field(name="Author", value="<YOUR-USERNAME>")
+    
+    # Shows the number of servers the bot is member of.
+    embed.add_field(name="Server count", value=f"{len(bot.guilds)}")
+
+    # give users a link to invite thsi bot to their server
+    embed.add_field(name="Invite", value="[Invite link](<insert your OAuth invitation link here>)")
+
+    await ctx.send(embed=embed)
+
+bot.remove_command('help')
+
+@bot.command()
+async def help(ctx):
+    embed = discord.Embed(title="nice bot", description="A Very Nice bot. List of commands are:", color=0xeee657)
+
+    embed.add_field(name="$add X Y", value="Gives the addition of **X** and **Y**", inline=False)
+    embed.add_field(name="$multiply X Y", value="Gives the multiplication of **X** and **Y**", inline=False)
+    embed.add_field(name="$greet", value="Gives a nice greet message", inline=False)
+    embed.add_field(name="$cat", value="Gives a cute cat gif to lighten up the mood.", inline=False)
+    embed.add_field(name="$info", value="Gives a little info about the bot", inline=False)
+    embed.add_field(name="$help", value="Gives this message", inline=False)
+
+    await ctx.send(embed=embed)
+
+bot.run('NDc1MTgyOTY4NDQ5NTMxOTE2.Dkb-MA.skbs9W1IsXkax-xLOrhGh9ed380')
